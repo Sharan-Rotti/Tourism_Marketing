@@ -265,6 +265,176 @@
 
 
 
+# import streamlit as st
+# import pandas as pd
+# import numpy as np
+# import joblib
+# import os
+
+# # =============================
+# # Page Configuration
+# # =============================
+# st.set_page_config(
+#     page_title="Tourism Marketing Prediction",
+#     page_icon="🌍",
+#     layout="wide"
+# )
+
+# # =============================
+# # Load Model (SAFE + DEBUG FRIENDLY)
+# # =============================
+# @st.cache_resource
+
+# def load_model():
+#     model_path = "random_forest_model.joblib"
+
+#     if not os.path.exists(model_path):
+#         st.error("❌ Model file not found. Ensure 'random_forest_model.joblib' is in the project root.")
+#         st.stop()
+
+#     try:
+#         model = joblib.load(model_path)
+#         return model
+#     except Exception as e:
+#         st.error("❌ Failed to load model. This usually happens due to Python/sklearn version mismatch or corrupted file.")
+#         st.exception(e)
+#         st.stop()
+
+# model = load_model()
+
+# # =============================
+# # Sidebar
+# # =============================
+# st.sidebar.title("🌍 Tourism Marketing ML App")
+# st.sidebar.markdown("---")
+# st.sidebar.info("Predict whether a customer will purchase a travel package")
+# st.sidebar.markdown("**Model:** Random Forest Classifier")
+# st.sidebar.markdown(f"**Expected Features:** {model.n_features_in_}")
+
+# # =============================
+# # Main Title
+# # =============================
+# st.title("🎯 Tourism Package Purchase Prediction")
+# st.markdown("Fill all customer details below and click **Predict**")
+# st.markdown("---")
+
+# # =============================
+# # Input Sections
+# # =============================
+# col1, col2, col3 = st.columns(3)
+
+# with col1:
+#     age = st.slider("Age", 18, 70, 30)
+#     gender = st.selectbox("Gender", ["Male", "Female"])
+#     city_tier = st.selectbox("City Tier", [1, 2, 3])
+#     occupation = st.selectbox(
+#         "Occupation",
+#         ["Salaried", "Small Business", "Large Business", "Free Lancer"]
+#     )
+#     monthly_income = st.number_input("Monthly Income", min_value=1000, max_value=200000, value=25000)
+
+# with col2:
+#     typeof_contact = st.selectbox("Type of Contact", ["Self Enquiry", "Company Invited"])
+#     duration_pitch = st.slider("Duration Of Pitch (mins)", 0, 60, 15)
+#     followups = st.slider("Number Of Followups", 0, 10, 2)
+#     product_pitched = st.selectbox(
+#         "Product Pitched",
+#         ["Basic", "Deluxe", "Standard", "Super Deluxe", "King"]
+#     )
+#     property_star = st.selectbox("Preferred Property Star", [3, 4, 5])
+
+# with col3:
+#     persons_visiting = st.slider("Number Of Person Visiting", 1, 10, 2)
+#     marital_status = st.selectbox("Marital Status", ["Single", "Married", "Divorced"])
+#     trips = st.slider("Number Of Trips", 0, 20, 2)
+#     passport = st.selectbox("Passport", [0, 1])
+#     pitch_score = st.slider("Pitch Satisfaction Score", 1, 5, 3)
+#     own_car = st.selectbox("Own Car", [0, 1])
+#     children_visiting = st.slider("Number Of Children Visiting", 0, 5, 0)
+#     designation = st.selectbox(
+#         "Designation",
+#         ["Executive", "Manager", "Senior Manager", "AVP", "VP"]
+#     )
+
+# # =============================
+# # Create Input DataFrame (MATCH TRAINING SCHEMA)
+# # =============================
+# input_df = pd.DataFrame([{
+#     "Age": age,
+#     "TypeofContact": typeof_contact,
+#     "CityTier": city_tier,
+#     "DurationOfPitch": duration_pitch,
+#     "Occupation": occupation,
+#     "Gender": gender,
+#     "NumberOfPersonVisiting": persons_visiting,
+#     "NumberOfFollowups": followups,
+#     "ProductPitched": product_pitched,
+#     "PreferredPropertyStar": property_star,
+#     "MaritalStatus": marital_status,
+#     "NumberOfTrips": trips,
+#     "Passport": passport,
+#     "PitchSatisfactionScore": pitch_score,
+#     "OwnCar": own_car,
+#     "NumberOfChildrenVisiting": children_visiting,
+#     "Designation": designation,
+#     "MonthlyIncome": monthly_income
+# }])
+
+# # =============================
+# # Prediction
+# # =============================
+# st.markdown("---")
+
+# # if st.button("🔮 Predict"):
+# #     try:
+# #         prediction = model.predict(input_df)[0]
+# #         proba = model.predict_proba(input_df)
+
+# #         st.subheader("📊 Prediction Result")
+
+# #         if prediction == 1:
+# #             st.success("✅ Customer is LIKELY to purchase the travel package")
+# #         else:
+# #             st.error("❌ Customer is NOT likely to purchase the travel package")
+
+# #         st.markdown("### Confidence")
+# #         st.progress(float(np.max(proba)))
+
+# #     except Exception as e:
+# #         st.error("Prediction failed due to input/schema mismatch")
+# #         st.exception(e)
+
+# # =============================
+# # Footer
+# # =============================
+# # st.markdown("---")
+# # st.caption("Built with Streamlit & Scikit-learn | ML Engineer Project")
+
+
+# if st.button("🔮 Predict"):
+#     try:
+#         # 🔥 FORCE EXACT FEATURE ORDER USED DURING TRAINING
+#         input_df = input_df[model.feature_names_in_]
+
+#         prediction = model.predict(input_df)[0]
+#         proba = model.predict_proba(input_df)
+
+#         st.subheader("📊 Prediction Result")
+
+#         if prediction == 1:
+#             st.success("✅ Customer is LIKELY to purchase the travel package")
+#         else:
+#             st.error("❌ Customer is NOT likely to purchase the travel package")
+
+#         st.markdown("### Confidence")
+#         st.progress(float(np.max(proba)))
+
+#     except Exception as e:
+#         st.error("Prediction failed due to feature mismatch")
+#         st.exception(e)
+
+
+
 import streamlit as st
 import pandas as pd
 import numpy as np
@@ -281,22 +451,20 @@ st.set_page_config(
 )
 
 # =============================
-# Load Model (SAFE + DEBUG FRIENDLY)
+# Load Model Safely
 # =============================
 @st.cache_resource
-
 def load_model():
     model_path = "random_forest_model.joblib"
 
     if not os.path.exists(model_path):
-        st.error("❌ Model file not found. Ensure 'random_forest_model.joblib' is in the project root.")
+        st.error("❌ Model file not found. Make sure random_forest_model.joblib is present.")
         st.stop()
 
     try:
-        model = joblib.load(model_path)
-        return model
+        return joblib.load(model_path)
     except Exception as e:
-        st.error("❌ Failed to load model. This usually happens due to Python/sklearn version mismatch or corrupted file.")
+        st.error("❌ Failed to load model (version mismatch or corrupted file)")
         st.exception(e)
         st.stop()
 
@@ -309,7 +477,6 @@ st.sidebar.title("🌍 Tourism Marketing ML App")
 st.sidebar.markdown("---")
 st.sidebar.info("Predict whether a customer will purchase a travel package")
 st.sidebar.markdown("**Model:** Random Forest Classifier")
-st.sidebar.markdown(f"**Expected Features:** {model.n_features_in_}")
 
 # =============================
 # Main Title
@@ -345,7 +512,7 @@ with col2:
 
 with col3:
     persons_visiting = st.slider("Number Of Person Visiting", 1, 10, 2)
-    marital_status = st.selectbox("Marital Status", ["Single", "Married", "Divorced"])
+    marital_status = st.selectbox("Marital Status", ["Single", "Married", "Unmarried", "Divorced"])
     trips = st.slider("Number Of Trips", 0, 20, 2)
     passport = st.selectbox("Passport", [0, 1])
     pitch_score = st.slider("Pitch Satisfaction Score", 1, 5, 3)
@@ -357,9 +524,9 @@ with col3:
     )
 
 # =============================
-# Create Input DataFrame (MATCH TRAINING SCHEMA)
+# RAW INPUT DATAFRAME
 # =============================
-input_df = pd.DataFrame([{
+raw_df = pd.DataFrame([{
     "Age": age,
     "TypeofContact": typeof_contact,
     "CityTier": city_tier,
@@ -381,43 +548,26 @@ input_df = pd.DataFrame([{
 }])
 
 # =============================
-# Prediction
+# Prediction (MANUAL ONE-HOT FIX)
 # =============================
 st.markdown("---")
 
-# if st.button("🔮 Predict"):
-#     try:
-#         prediction = model.predict(input_df)[0]
-#         proba = model.predict_proba(input_df)
-
-#         st.subheader("📊 Prediction Result")
-
-#         if prediction == 1:
-#             st.success("✅ Customer is LIKELY to purchase the travel package")
-#         else:
-#             st.error("❌ Customer is NOT likely to purchase the travel package")
-
-#         st.markdown("### Confidence")
-#         st.progress(float(np.max(proba)))
-
-#     except Exception as e:
-#         st.error("Prediction failed due to input/schema mismatch")
-#         st.exception(e)
-
-# =============================
-# Footer
-# =============================
-# st.markdown("---")
-# st.caption("Built with Streamlit & Scikit-learn | ML Engineer Project")
-
-
 if st.button("🔮 Predict"):
     try:
-        # 🔥 FORCE EXACT FEATURE ORDER USED DURING TRAINING
-        input_df = input_df[model.feature_names_in_]
+        # One-hot encode like training
+        encoded_df = pd.get_dummies(raw_df)
 
-        prediction = model.predict(input_df)[0]
-        proba = model.predict_proba(input_df)
+        # Add missing columns expected by model
+        for col in model.feature_names_in_:
+            if col not in encoded_df.columns:
+                encoded_df[col] = 0
+
+        # Reorder columns EXACTLY as model expects
+        encoded_df = encoded_df[model.feature_names_in_]
+
+        # Prediction
+        prediction = model.predict(encoded_df)[0]
+        proba = model.predict_proba(encoded_df)
 
         st.subheader("📊 Prediction Result")
 
@@ -430,6 +580,12 @@ if st.button("🔮 Predict"):
         st.progress(float(np.max(proba)))
 
     except Exception as e:
-        st.error("Prediction failed due to feature mismatch")
+        st.error("Prediction failed due to encoding/schema mismatch")
         st.exception(e)
+
+# =============================
+# Footer
+# =============================
+st.markdown("---")
+st.caption("Built with Streamlit & Scikit-learn | Tourism Marketing ML App")
 
