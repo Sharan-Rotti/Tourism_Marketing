@@ -385,8 +385,37 @@ input_df = pd.DataFrame([{
 # =============================
 st.markdown("---")
 
+# if st.button("🔮 Predict"):
+#     try:
+#         prediction = model.predict(input_df)[0]
+#         proba = model.predict_proba(input_df)
+
+#         st.subheader("📊 Prediction Result")
+
+#         if prediction == 1:
+#             st.success("✅ Customer is LIKELY to purchase the travel package")
+#         else:
+#             st.error("❌ Customer is NOT likely to purchase the travel package")
+
+#         st.markdown("### Confidence")
+#         st.progress(float(np.max(proba)))
+
+#     except Exception as e:
+#         st.error("Prediction failed due to input/schema mismatch")
+#         st.exception(e)
+
+# =============================
+# Footer
+# =============================
+# st.markdown("---")
+# st.caption("Built with Streamlit & Scikit-learn | ML Engineer Project")
+
+
 if st.button("🔮 Predict"):
     try:
+        # 🔥 FORCE EXACT FEATURE ORDER USED DURING TRAINING
+        input_df = input_df[model.feature_names_in_]
+
         prediction = model.predict(input_df)[0]
         proba = model.predict_proba(input_df)
 
@@ -401,11 +430,6 @@ if st.button("🔮 Predict"):
         st.progress(float(np.max(proba)))
 
     except Exception as e:
-        st.error("Prediction failed due to input/schema mismatch")
+        st.error("Prediction failed due to feature mismatch")
         st.exception(e)
 
-# =============================
-# Footer
-# =============================
-st.markdown("---")
-st.caption("Built with Streamlit & Scikit-learn | ML Engineer Project")
